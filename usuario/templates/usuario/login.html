@@ -1,0 +1,46 @@
+{% load static %}
+<div class="modal fade" id="login">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title font-weight-bold">Entre em sua conta</span>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                {% if login_form.has_errors %}
+                    <p style="color: red;">Login ou senha inválido.</p>
+                {% endif %}
+                <form class="pb-3" action="{% url 'login' %}" method ="POST" novalidate>
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label>E-mail:</label>
+                            </div>
+                            <div class="col-10">
+                                {{ login_form.username }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label>Senha:</label>
+                            </div>
+                            <div class="col-10">
+                                {{ login_form.password }}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <a href="#">Esqueci minha senha</a>
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-primary btn-block" type="submit" name="login" style="float:right">ENTRAR  <i class="fas fa-sign-in-alt"></i></button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-block botao-rosa" type="button" onclick="location.href={% url 'cadastro' %}" name="cadastro">CADASTRAR-ME  <i class="fas fa-user-plus"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

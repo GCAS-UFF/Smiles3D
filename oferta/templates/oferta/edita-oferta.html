@@ -1,0 +1,154 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Proposta{% endblock %}
+
+{% block addstuff %}
+    <script src="{% static 'src/lib/detector.js' %}"></script>
+    <script src="{% static 'src/lib/MadeleineConverter' %}"></script>
+    <script src="{% static 'src/lib/MadeleineLoader.js' %}"></script>
+    <script src="{% static 'src/lib/stats.js' %}"></script>
+    <script src="{% static 'src/lib/three.min.js' %}"></script>
+    <script src="{% static 'src/Madeleine.js' %}"></script>
+    <link href="{% static 'src/css/Madeleine.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+<div class="row pt-3">
+    <div class="col-6">
+        <h3 style="color:royalblue">Resumo do Pregão: </h3>
+        <hr>
+        <ul style="list-sytle:none;">
+            <li><strong>Usuário: </strong><a href="{% url 'perfil' pregao.usuario.id %}" class="cNome">{{pregao.usuario}}</a></li>
+            <li><strong>Tipo do pregão: </strong>{{ pregao.tipo }}</li>
+            <li><strong>Dente: </strong>
+                {% for dente in dentes %}
+                    {{ dente }},
+                {% endfor %}
+            </li>
+            <li><strong>Cor: </strong>{{ pregao.cor }}</li>
+            <li><strong>Escala: </strong>{{ pregao.escala }}</li>
+            <li><strong>Material: </strong>{{ pregao.material }}</li>
+            <li><strong>Observações: </strong>{{ pregao.extra }}</li>
+            <li><strong>Preço inicial: </strong>R${{ pregao.preco }}</li>
+            <li><strong>Data de registro: </strong><em>{{ pregao.data }}</em></li>
+            <li><strong>Prazo: </strong><em>{{ pregao.prazo }}</em></li>
+            <li><strong>Arquivo STL:</strong>
+                <div class="container">
+                    <div id="target" class="madeleine"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-6">
+        <h3 style="color:royalblue">Edite sua Proposta: </h3>
+        <hr>
+        <form method="post" novalidate action="{% url 'edita-oferta' pregao.slug_pregao id_oferta %}"  id="form_oferta" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Preço*:</label>
+                </div>
+                <div class="col-9">
+                    {{ form_oferta.preco }}
+                    {% if form_oferta.preco.errors %}
+                    <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                        {% for error in form_oferta.preco.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Prazo*:</label>
+                </div>
+                <div class="col-9">
+                    {{ form_oferta.prazo }}
+                    {% if form_oferta.prazo.errors %}
+                    <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                        {% for error in form_oferta.prazo.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Forma de Pagamento*:</label>
+                </div>
+                <div class="col-9">
+                    {{ form_oferta.forma_pagamento }}
+                    {% if form_oferta.forma_pagamento.errors %}
+                    <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                        {% for error in form_oferta.forma_pagamento.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Forma de Envio*:</label>
+                </div>
+                <div class="col-9">
+                    {{ form_oferta.forma_envio }}
+                    {% if form_oferta.forma_envio.errors %}
+                    <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                        {% for error in form_oferta.forma_envio.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Observações*:</label>
+                </div>
+                <div class="col-9">
+                    {{ form_oferta.observacao }}
+                    {% if form_oferta.observacao.errors %}
+                    <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                        {% for error in form_oferta.observacao.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Modelo STL*:</label>
+                </div>
+                <div class="col-9">
+                    {{ form_oferta.modeloSTL }}
+                    {% if form_oferta.modeloSTL.errors %}
+                    <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                        {% for error in form_oferta.modeloSTL.errors %}
+                        <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <p style="color:red;">* Campos obrigatórios</p>
+            <button class="btn btn-primary btn-block" type="submit" style="width:80px; float:right; margin-top:20px;">SALVAR </button>
+        </form>
+    </div>
+
+    <script>
+         window.onload = function(){
+            var madeleine = new Madeleine({
+                target: 'target',
+                data: '{{ pregao.modeloSTL.url }}',
+                path: '../../../static/src/'
+            });
+         };
+    </script>
+
+</div>
+{% endblock %}

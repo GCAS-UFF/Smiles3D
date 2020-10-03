@@ -1,0 +1,86 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Perfil de {{ usuario.username }}{% endblock %}
+
+{% block main %}
+    <div class="row mt-3 pt-3">
+        <div class="col-4">
+            {% if perfil.foto %}
+                <img src="{{ perfil.foto.url }}" class="fotoPerfil" style="width: 200px; height: 200px;">
+            {% else %}
+                <img src="{% static 'images/user.png' %}" class="fotoPerfil" style="width: 200px; height: 200px;">
+            {% endif %}
+        </div>
+        <div class="col-8">
+            {% if usuario.tipo == "Pessoa Física" %}
+                <h3>{{ perfil.nome }}</h3>
+                <p class="usuario">@{{ usuario.username }}</p>
+                <p>{{ perfil.profissao }}</p>
+                {% if perfil.autonomo %}
+                    <p>Trabalhador autônomo</p>
+                {% else %}
+                    <p>Funcionário na empresa {{ perfil.empresa }}</p>
+                {% endif %}
+            {% else %}
+                <p>{{ perfil.razao_social }}</p>
+                <p>{{ usuario.username }}</p>
+                <p>{{ perfil.departamento }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="mb-3 pb-3 row">
+        <div class="col-6">
+            <h2>Avaliação: {{ perfil.media_avaliacao }}</h2>
+            {% if avaliacoes %}
+                {% for avaliacao in avaliacoes %}
+                    <div class="container caixa">
+                         <a href="{% url 'perfil' avaliacao.avaliador %}"><strong>{{ avaliacao.avaliador }}</strong></a>
+                         {% if request.user == avaliacao.avaliador %}
+                            <a href="{% url 'excluir-avaliacao' avaliacao.id usuario.id %}" class="opcoes-criador"><i class="fas fa-trash"></i></a>
+                         {% endif %}
+                         <div class="container row">
+                             <div class="fotoPerfil col-2">
+                                 <a href="{% url 'perfil' avaliacao.avaliador %}"><img src="{{ avaliacao.avaliador.foto.url }}" class="img-fluid"></a>
+                             </div>
+                             <div class="col-10">
+                                 Avaliação: {{ avaliacao.nota }}
+                                 <p>"{{ avaliacao.extra }}"</p>
+                             </div>
+                         </div>
+                     </div>
+                     <br>
+                {% endfor %}
+            {% else %}
+                <p>Este usuário ainda não foi avaliado.</p>
+            {% endif %}
+
+        </div>
+        <div class="col-6">
+            <h2>Pregões:</h2>
+            {% if pregoes %}
+                {% for pregao in pregoes %}
+                    <div class="container pregoes mx-auto">
+                        <ul class="lista-nao">
+                            <li><strong>PREGÃO</strong></li>
+                            <li><strong>Tipo do pregão: </strong>{{ pregao.tipo }}</li>
+                            <li><strong>Preço inicial: </strong>R${{ pregao.preco }}</li>
+                            <li><strong>Prazo: </strong><em>{{ pregao.prazo }}</em></li>
+                            <li><strong>Data de registro: </strong><em>{{ pregao.data }}</em></li>
+                            <br>
+                            <a href="{% url 'visualizar-pregao' pregao.slug_pregao %}" class="saiba-mais">SAIBA MAIS  <i class="fas fa-info" ></i></a>
+                        </ul>
+                    </div>
+                    <br>
+                {% endfor %}
+            {% else %}
+                <p>Este usuário ainda não criou nenhum pregão.</p>
+                {% if request.user == usuario %}
+                    <a href="{% url 'novo-pregao' %}"><i class="fas fa-plus"></i> Criar Pregão</a>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

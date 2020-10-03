@@ -1,0 +1,158 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Cadastro de Pessoa Física{% endblock %}
+
+{% block main %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3 class="pt-3" style="color: rgba(255, 4, 92, 1);">Cadastro de Pessoa Física </h3>
+    <div class="container mx-auto" style="width: 70%;">
+        <form method="post" action="{% url 'cadastro-pf' %}">
+            {% csrf_token %}
+            <div id="cadastro-pf">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Nome:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.nome }}
+                        {% if formPF.nome.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.nome.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>CPF:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.cpf }}
+                        {% if formPF.cpf.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.cpf.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>CRO:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.cro }}
+                        {% if formPF.cro.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.cro.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Foto:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.foto }}
+                        {% if formPF.foto.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.foto.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Profissão:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.profissao }}
+                        {% if formPF.profissao.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.profissao.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Autônomo:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.autonomo }}
+                        {% if formPF.autonomo.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.autonomo.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row" id="trabalha-em-empresa" style="display: none;">
+                    <div class="col-4">
+                        <label>Empresa para a qual trabalha:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.empresa }}
+                        {% if formPF.empresa.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.empresa.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Telefone:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.telefone }}
+                        {% if formPF.telefone.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.telefone.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="pt-3 pb-3" style="overflow: hidden;">
+                <a href="{% url 'cadastro' %}" style="width:80px; margin-top:20px; float: left;"><i class="fas fa-chevron-left"></i> VOLTAR</a>
+                <button class="btn btn-primary btn-block" type="submit" style="width:80px; margin-top:20px; float: right;">CADASTRAR</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

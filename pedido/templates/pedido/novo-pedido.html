@@ -1,0 +1,121 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Aceite Oferta{% endblock %}
+
+{% block main %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3 class="pt-3 titulo-rosa">Aceite</h3>
+    <hr>
+    <p>Parabéns pela escolha de seu novo pregão!</p>
+    <p>Confirme o endereço de entrega:</p>
+    <ul class="lista-nao informarcoes">
+        <li><strong>Endereço: </strong>{{ endereco_usuario.endereco }}</li>
+        <li><strong>Complemento: </strong>{{ endereco_usuario.complemento }}</li>
+        <li><strong>CEP: </strong>{{ endereco_usuario.cep }}</li>
+        <li><strong>Cidade: </strong>{{ endereco_usuario.cidade }}</li>
+        <li><strong>UF: </strong>{{ endereco_usuario.uf }}</li>
+    </ul>
+    <form method="post" novalidate action="{% url 'novo-pedido' pregao.slug_pregao oferta.id %}">
+        <button class="btn btn-light" type="button" data-toggle="collapse" data-target="#novoEndereco" aria-expanded="false" aria-controls="novoEndereco">
+            Cadastrar outro endereço de entrega
+        </button>
+
+        <div class="collapse" id="novoEndereco">
+          <div class="card card-body">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Endereço:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form_endereco_entrega.endereco_entrega }}
+                        {% if form_endereco_entrega.endereco_entrega.errors %}
+                        <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                            {% for error in form_endereco_entrega.endereco_entrega.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Complemento:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form_endereco_entrega.complemento_entrega }}
+                        {% if form_endereco_entrega.complemento_entrega.errors %}
+                        <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                            {% for error in form_endereco_entrega.complemento_entrega.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>CEP:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form_endereco_entrega.cep_entrega }}
+                        {% if form_endereco_entrega.cep_entrega.errors %}
+                        <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                            {% for error in form_endereco_entrega.cep_entrega.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Cidade:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form_endereco_entrega.cidade_entrega }}
+                        {% if form_endereco_entrega.cidade_entrega.errors %}
+                        <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                            {% for error in form_endereco_entrega.cidade_entrega.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>UF:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form_endereco_entrega.uf_entrega }}
+                        {% if form_endereco_entrega.uf_entrega.errors %}
+                        <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                            {% for error in form_endereco_entrega.uf_entrega.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+          </div>
+        </div>
+
+        <br><br><br>
+
+        <button type="submit" class="btn btn-primary">Continuar</button>
+    </form>
+
+
+{% endblock %}

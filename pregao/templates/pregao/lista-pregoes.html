@@ -1,0 +1,57 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Lista de Pregões{% endblock %}
+
+{% block main %}
+    <h3 class="pt-3 titulo-rosa">Pregões Abertos: </h3>
+    <hr>
+    {% if pregoes %}
+        {% for pregoe in pregoes %}
+                <div class="container card mx-auto">
+                    <ul class="lista-nao">
+                        {% if pregoe.usuario == request.user %}
+                            <a href="{% url 'editar-pregao' pregoe.slug_pregao %}" class="opcoes-criador"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="{% url 'remove-pregao' pregoe.slug_pregao %}" id="btn-excluir-pregao" class="opcoes-criador"><i class="fas fa-trash-alt"></i></a>
+                        {% endif %}
+                        <li><strong>PREGÃO ABERTO</strong></li>
+                        <li><strong>Tipo do pregão: </strong>{{ pregoe.tipo }}</li>
+                        <li><strong>Dono do pregão: </strong><a href="{% url 'perfil' pregoe.usuario %}">@{{ pregoe.usuario }}</a></li>
+                        <li><strong>Preço inicial: </strong>R${{ pregoe.preco }}</li>
+                        <li><strong>Prazo: </strong><em>{{ pregoe.prazo }}</em></li>
+                        <li><strong>Data de registro: </strong><em>{{ pregoe.data }}</em></li>
+                        <a href="{% url 'visualizar-pregao' pregoe.slug_pregao %}" class="saiba-mais">SAIBA MAIS <i class="fas fa-arrow-right"></i></a>
+                    </ul>
+                </div>
+            <br>
+        {% endfor %}
+
+<br>
+<br>
+<br>
+<br>
+
+        {% if pregoes.has_previous %}
+            <a href="?page=1" class="mr-1">[primeira]</a>
+            <a href="?page={{ pregoes.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+        {% endif %}
+        <span class="current">{{ pregoes.number }} de {{ pregoes.paginator.num_pages }}</span>
+        {% if pregoes.has_next %}
+            <a href="?page={{ pregoes.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+            <a href="?page={{ pregoes.paginator.num_pages }}" class="mr-1">[última]</a>
+        {% endif %}
+
+    {% else %}
+        <div class="pt-4 pt-4 centro">
+            <h5 class="pb-3">Não há pregões abertos no momento...</h5>
+            <a href="{% url 'novo-pregao' %}"><i class="fas fa-plus"></i> Crie seu próprio pregão agora mesmo!</a>
+        </div>
+        <br><br><br><br><br><br>
+    {% endif %}
+
+<script>
+     document.getElementById("btn-excluir-pregao").onclick = function () {
+         return confirm("Você realmente deseja excluir seu pregão? \nEsta ação não pode ser desfeita. \nTodos os comentáiros e ofertas postadas para este pregão também serão excluídos.");
+    };
+</script>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Pedido Realizado{% endblock %}
+
+{% block main %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3 class="pt-3 titulo-rosa">Compra Realizada</h3>
+    <hr>
+    <p>Parabéns pela aquisição!</p>
+    <p>Aguarde atualizações do status de seu pedido por e-mail.</p>
+    <p>Dados do pedido:</p>
+    <ul class="lista-nao informarcoes">
+        <li><strong>Status: {{ pedido.status }}</strong></li>
+        <li><strong>Vendedor: </strong>@{{ pedido.vendedor }}<br><a href="#">Enviar mensagem</a></li>
+        <li><strong>Pregão: </strong>{{ pedido.pregao.tipo }}</li>
+        <li><strong>Forma de envio: </strong>{{ pedido.forma_envio }}</li>
+        <li><strong>Forma de pagamento: </strong>{{ pedido.forma_pagamento }}</li>
+        <li><strong>Endereço: </strong>{{ pedido.endereco_entrega }}</li>
+        <li><strong>Complemento: </strong>{{ pedido.complemento_entrega }}</li>
+        <li><strong>CEP: </strong>{{ pedido.cep_entrega }}</li>
+        <li><strong>Cidade: </strong>{{ pedido.cidade_entrega }}</li>
+        <li><strong>UF: </strong>{{ pedido.uf_entrega }}</li>
+    </ul>
+
+    {% if pedido.avaliacao_realizada %}
+        <p>Você já avaliou este usuário</p>
+    {% else %}
+        <div>
+            <form method="post" novalidate action="{% url 'pedido' pedido.id %}">
+                {% csrf_token %}
+                <p>Avaliar @{{ pedido.vendedor.username }} :</p>
+                <div class="form-group row">
+                    <div class="col-3">
+                        <label>Nota:</label>
+                    </div>
+                    <div class="col-9">
+                        {{ form_avaliacao.nota }}
+                        {% if form_avaliacao.nota.errors %}
+                        <div class="alert alert-danger mb-0 erro">
+                            {% for error in form_avaliacao.nota.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-3">
+                        <label>Comentários:</label>
+                    </div>
+                    <div class="col-9">
+                        {{ form_avaliacao.extra }}
+                        {% if form_avaliacao.extra.errors %}
+                        <div class="alert alert-danger mb-0 erro">
+                            {% for error in form_avaliacao.extra.errors %}
+                            <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block mr-auto botao-formulario" type="submit">AVALIAR</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Voltar para a página inicial</a>
+
+    
+{% endblock %}

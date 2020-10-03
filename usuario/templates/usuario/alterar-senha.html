@@ -1,0 +1,31 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Alterar Senha{% endblock %}
+
+{% block main %}
+    <h3 class="pt-3 titulo-rosa">Alterar Senha: </h3>
+    <hr>
+    <form class="pb-3" action="{% url 'alterar-senha' %}" method ="POST" novalidate>
+        {% csrf_token %}
+        <fieldset>
+            <div class="form-group row">
+                <div class="col-2">
+                    <label>Nova senha:</label>
+                </div>
+                <div class="col-10">
+                    {{ form_senha.new_password1 }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-2">
+                    <label>Confirme sua senha:</label>
+                </div>
+                <div class="col-10">
+                    {{ form_senha.new_password2 }}
+                </div>
+            </div>
+        </fieldset>
+        <button class="btn btn-primary btn-block" type="submit" name="login" style="float:right">ALTERAR  <i class="fas fa-sign-in-alt"></i></button>
+    </form>
+
+{% endblock %}

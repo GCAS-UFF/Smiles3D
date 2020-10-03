@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    {% load static %}
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %} - SMILES 3D</title>
+        <link href="{% static 'images/favicon.png' %}" rel="shortcut icon"/>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/f2645426d5.js" crossorigin="anonymous"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q" crossorigin="anonymous">
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Questrial|Teko:300,400,500,600" rel="stylesheet">
+
+        {% block addstuff %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <nav class="navbar navbar-light bg-light navbar-expand-xl shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}"><img class="img-responsive log" height="70" src="{% static 'images/Logo2.png' %}" width="70"></a>
+                <a class="navbar-brand" href="{% url 'home' %}"><h1 class="site-name">SMILES 3D</h1></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Botão de navegação">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'sobre' %}">Sobre</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'todos-abertos' %}">Pregões Abertos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'meus-pregoes' %}">Meus Pregões</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'novo-pregao' %}">Novo Pregão</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="{% url 'perfil' request.user %}" id="navbarDropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Minha Conta
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenu2">
+                                    <p class="dropdown-item">Conta: <strong>{{ request.user.username }}</strong></p>
+                                    <a class="dropdown-item" href="{% url 'perfil' request.user %}">Meu Perfil</a>
+                                    <a class="dropdown-item" href="{% url 'logout' %}">Sair</a>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="#login" data-toggle="modal">Entrar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'cadastro' %}">Cadastrar</a>
+                            </li>
+                            {% include "usuario/login.html" %}
+                        {% endif %}
+                    </ul>
+                    {% if user.is_authenticated %}
+                        <form class="form-inline pesquisa" action="{% url 'pesquisar' %}" method='GET' id="pesquisa-form">
+                            {{ busca_form.busca_por }}
+                            <button class="btn text-center botao-pesquisa" type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        <div class="container main">
+            {% block main %}
+            {% endblock %}
+        </div>
+
+        <footer class="footer pt-3 border-top">
+            <div class="container text-center pb-3">
+                <div class="row">
+                    <div class="col-3">
+                        <a class="footer-link" href="{% url 'sobre' %}#politica">Política de Privacidade</a>
+                    </div>
+                    <div class="col-3">
+                        <a class="footer-link" href="{% url 'sobre' %}#termos">Termos de Uso</a>
+                    </div>
+                    <div class="col-3">
+                        <a class="footer-link" href="{% url 'sobre' %}#contato">Contato</a>
+                    </div>
+                    <div class="col-3">
+                        <a class="footer-link" href="{% url 'sobre' %}#duvidas">Dúvidas</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-copyright text-center py-2">© 2018 - 2020 Copyright:
+                <a class="midiacom" href="http://www.midiacom.uff.br/midiacom"> MidiaCom.uff.br</a>
+            </div>
+        </footer>
+    </body>
+</html>

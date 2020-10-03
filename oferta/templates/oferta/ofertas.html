@@ -1,0 +1,37 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Ofertas Recebidas{% endblock %}
+
+{% block main %}
+    <h3 class="pt-3" style="color: rgba(255, 4, 92, 1);">Ofertas Recebidas: </h3>
+    <hr>
+    {% for oferta in ofertas %}
+        <div class="container pregoes mx-auto">
+            <ul class="lista-nao">
+                <li><strong>OFERTA</strong></li>
+                <li><strong>Criada em: </strong>{{ oferta.data }}</li>
+                <li><strong>Criada por: </strong>{{ oferta.usuario }}</li>
+                <li><strong>Preço: </strong>R${{ oferta.preco }}</li>
+                <li><strong>Prazo: </strong><em>{{ oferta.prazo }}</em></li>
+                <a href="{% url 'visualizar-oferta' oferta.pregao oferta.id %}" style="float:right; margin-top:-20px;">SAIBA MAIS  <i class="fas fa-info" ></i></a>
+            </ul>
+        </div>
+    {% endfor %}
+
+    {% if ofertas.has_previous %}
+        <a href="?page=1" style="margin-right:10px;">[primeira]</a>
+        <a href="?page={{ ofertas.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+    {% endif %}
+    <span class="current">{{ ofertas.number }} de {{ ofertas.paginator.num_pages }}</span>
+    {% if ofertas.has_next %}
+        <a href="?page={{ ofertas.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+        <a href="?page={{ ofertas.paginator.num_pages }}" style="margin-left:10px;">[última]</a>
+    {% endif %}
+
+<script>
+     document.getElementById("btn-excluir-pregao").onclick = function () {
+         return confirm("Você realmente deseja excluir seu pregão? \nEsta ação não pode ser desfeita. \nTodos os comentáiros e ofertas postadas para este pregão também serão excluídos.");
+    };
+</script>
+
+{% endblock %}

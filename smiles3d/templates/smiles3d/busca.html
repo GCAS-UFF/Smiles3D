@@ -1,0 +1,70 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Busca por {{ buca_por }}{% endblock %}
+
+{% block main %}
+<h3 class="pt-3 pb-2 row" style="color: rgba(255, 4, 92, 1);">Resultado da busca  por: {{ busca_por }}</h3>
+<hr>
+<div class="row">
+    <div class="col-6">
+        <h5>Pregões:</h5>
+        <hr>
+        {% if pregoes %}
+            {% for pregao in pregoes %}
+                <div class="pregoes container pregoes mx-auto mb-5" style="width: 70%;">
+                    <ul style="list-style: none;">
+                        <li style="list-style:none;"><strong>PREGÃO ABERTO</strong></li>
+                        <li style="list-style:none;"><strong>Tipo do pregão: </strong>{{ pregao.tipo }}</li>
+                        <li style="list-style:none;"><strong>Usuário: </strong><a href="{% url 'perfil' pregao.usuario %}">@{{ pregao.usuario }}</a></li>
+                        <li style="list-style:none;"><strong>Preço inicial: </strong>R${{ pregao.preco }}</li>
+                        <li style="list-style:none;"><strong>Prazo: </strong><em>{{ pregao.prazo }}</em></li>
+                        <li style="list-style:none;"><strong>Data de registro: </strong><em>{{ pregao.data }}</em></li>
+                        <a href="{% url 'visualizar-pregao' pregao.slug_pregao %}" style="float:right; margin-top:-20px;">SAIBA MAIS  <i class="fas fa-info" ></i></a>
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhum pregão corresponde a sua pesquisa.</p>
+        {% endif %}
+    </div>
+    <div class="col-6">
+        <h5>Usuários:</h5>
+        <hr>
+        {% if usuarios %}
+            {% for usuario, perfil in usuarios %}
+                {% if usuario.tipo == "Pessoa Física" %}
+                    <div class="pregoes container pregoes mx-auto mb-5" style="width: 70%;">
+                        <div class="circle1 col-2">
+                            <a href="{% url 'perfil' usuario.username %}"><img src="{{ perfil.foto.url }}" class="fotoPerfil img-fluid" style="max-width: 80px;"></a>
+                        </div>
+                        <ul style="list-style: none;">
+                            <li style="list-style:none;"><strong>{{ perfil.nome }}</strong></li>
+                            <li style="list-style:none;"><a href="{% url 'perfil' usuario.username %}">@{{ usuario.username }}</a></li>
+                            <li style="list-style:none;">Avaliação: {{ perfil.media_avaliacao }}</li>
+                            {% if perfil.autonomo %}
+                                <li style="list-style:none;">{{ perfil.profissao }} autônomo</li>
+                            {% else %}
+                                <li style="list-style:none;">{{ perfil.profissao }} na empresa {{ perfil.empresa }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="pregoes container pregoes mx-auto mb-5" style="width: 70%;">
+                        <div class="circle1 col-2">
+                            <a href="{% url 'perfil' usuario.username %}"><img src="{{ perfil.foto.url }}" class="fotoPerfil img-fluid" style="max-width: 80px;"></a>
+                        </div>
+                        <ul style="list-style: none;">
+                            <li style="list-style:none;"><strong>{{ perfil.razao_social }}</strong></li>
+                            <li style="list-style:none;"><a href="{% url 'perfil' usuario.username %}">@{{ usuario.username }}</a></li>
+                            <li style="list-style:none;">Avaliação: {{ perfil.media_avaliacao }}</li>
+                            <li style="list-style:none;">Departamento {{ perfil.departamento }}</li>
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>Nenhum usuário corresponde a sua busca.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

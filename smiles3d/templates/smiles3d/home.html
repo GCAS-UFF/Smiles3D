@@ -1,0 +1,82 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Início{% endblock %}
+
+{% block main %}
+
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleIndicators" data-slide-to="0"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    </ol>
+
+    <div class="carousel-inner">
+      <div class="carousel-item">
+        <img class="d-block img-fluid w-100 img-responsive" src="{% static 'images/full-mouth-dental-implants.jpg' %}">
+      </div>
+      <div class="carousel-item active">
+        <img class="d-block img-fluid w-100 img-responsive" src="{% static 'images/pr%C3%B3tese-dentadura-em-silicone.jpg' %}">
+      </div>
+      <div class="carousel-item">
+        <img class="d-block img-fluid w-100 img-responsive" src="{% static 'images/protesismarbella.jpg' %}">
+      </div>
+    </div>
+  </div>
+
+  <h4 class="titulo titulo-rosa"><strong>O que é a SMILES 3D? Como funciona?</strong></h4>
+
+  <p>Dentistas tem passado por um grande problema para encontrar outros projetistas ou protéticos que possam atender suas demandas de serviços. Atualmente, para que protéticos e projetistas possam ser encontrados por dentistas, eles precisam estar em uma rede de conexão que, por muitas vezes, é restrita a grandes empresas.</p>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <h6><strong>PROTÉTICO:</strong></h6>
+      <p>Roberta, tem 32 anos, mora no Rio de Janeiro e é uma protética e empreendedora.
+        Ela investiu em uma CAD-CAM para imprimir dentes e fundou a ProtoCiso, laboratório de prótese dentária,
+        porém ela não encontrou clientes suficientes para manter o equipamento funcionando em uma escala rentável como ela planejou.
+        As empresas impõem um canal de comunicação que só
+        permitem a impressão com as próprias máquinas, o que
+        acaba restringindo o número de clientes de Roberta.
+        Ela gostaria de aumentar a rentabilidade do negócio,
+        tendo um meio de comunicação mais amplo.</p>
+    </div>
+
+    <div class="col-lg-6">
+      <h6><strong>DENTISTA:</strong></h6>
+      <p>Geovani é dentista, mora na cidade do Rio de Janeiro,
+        tem 39 anos e é formado pela Universidade Federal
+        Fluminense.
+        Ele possui sua própria clínica e reequipou sua clínica há
+        5 anos. Nessa nova compra ele adquiriu uma CAD-CAM
+        para escanear os dentes dos pacientes, a qual ele utiliza
+        no tratamento de prótese dentária. Ao adquirir o
+        equipamento ele tem acesso a apenas uma nuvem, o que
+        restringe o número de protéticos com quem ele pode
+        trabalhar.
+        Ele gostaria de ter mais autonomia para se comunicar
+        com outros profissionais da área protética-odontológica.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <p>Para resolver o problema, propomos uma aplicação
+  web que possa conectar tanto Roberta, quanto
+  Geovani.
+  Nesta rede, Roberta poderia oferecer propostas
+  para demandas abertas por pessoas como
+  Geovanni. Estas ofertas se comportariam como
+  leilões, onde o dentista iria escolher, dentre várias
+  opções, a melhor que se encaixa com suas necessidades.</p>
+
+  <hr>
+
+  <h4 class="titulo titulo-azul"><strong>Vídeo Tutorial da Plataforma:</strong></h4>
+
+  <div class="container video-container">
+    <iframe class="video" src="https://www.youtube.com/embed/7rt6xhadCJ0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+{% endblock %}

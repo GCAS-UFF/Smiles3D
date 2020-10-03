@@ -1,0 +1,90 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Proposta{% endblock %}
+
+{% block addstuff %}
+    <script src="{% static 'src/lib/detector.js' %}"></script>
+    <script src="{% static 'src/lib/MadeleineConverter.js' %}"></script>
+    <script src="{% static 'src/lib/MadeleineLoader.js' %}"></script>
+    <script src="{% static 'src/lib/stats.js' %}"></script>
+    <script src="{% static 'src/lib/three.min.js' %}"></script>
+    <script src="{% static 'src/Madeleine.js' %}"></script>
+    <link href="{% static 'src/css/Madeleine.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+<div class="row pt-3">
+    <div class="col-6">
+        <h3 style="color:royalblue">Resumo do Pregão: </h3>
+        <hr>
+        <ul class="lista-nao">
+            <li><strong>Usuário: </strong><a href="{% url 'perfil' pregao.usuario %}" class="cNome">{{ pregao.usuario }}</a></li>
+            <li><strong>Tipo do pregão: </strong>{{ pregao.tipo }}</li>
+            <li><strong>Dente: </strong>
+                {% for dente in dentes %}
+                    {{ dente }},
+                {% endfor %}
+            </li>
+            <li><strong>Cor: </strong>{{ pregao.cor }}</li>
+            <li><strong>Escala: </strong>{{ pregao.escala }}</li>
+            <li><strong>Material: </strong>{{ pregao.material }}</li>
+            <li><strong>Observações: </strong>{{ pregao.extra }}</li>
+            <li><strong>Preço inicial: </strong>R${{ pregao.preco }}</li>
+            <li><strong>Data de registro: </strong><em>{{ pregao.data }}</em></li>
+            <li><strong>Prazo: </strong><em>{{ pregao.prazo }}</em></li>
+            <li><strong>Arquivo STL:</strong>
+                <div class="container">
+                    <div id="target1" class="madeleine"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-6">
+        {% if request.user == oferta.user %}
+            <a href="{% url 'edita-oferta' pregao.slug_pregao oferta.id %}" style="position: relative; float: right;"><i class="fas fa-pencil-alt"></i></a>
+            <a href="{% url 'remove-oferta' pregao.slug_pregao oferta.id %}" style="position: relative; float: right;"><i class="fas fa-trash-alt"></i></a>
+        {% endif %}
+        <h3 style="color:royalblue">Resumo da Proposta: </h3>
+         <hr>
+        <ul class="lista-nao">
+            <li><strong>Usuário: </strong><a href="{% url 'perfil' oferta.usuario %}" class="cNome">{{ oferta.usuario }}</a></li>
+            <li><strong>Preço: </strong>R${{ oferta.preco }}</li>
+            <li><strong>Prazo: </strong>{{ oferta.prazo }}</li>
+            <li><strong>Data de Registro: </strong>{{ oferta.data }}</li>
+            <li><strong>Observações: </strong>{{ oferta.observacao }}</li>
+            <li><strong>Arquivo STL:</strong>
+                <div class="container">
+                    <div id="target2" class="madeleine"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    {% if request.user == pregao.usuario %}
+        <div class="pt-3 pb-3 ml-auto">
+            <button type="button" class="btn btn-success" ><a class="botao" href="{% url 'novo-pedido' pregao.slug_pregao oferta.id %}">Aceitar Proposta <i class="fas fa-check"></i></a></button>
+            <form style="display: inline" action="{% url 'novo-pedido' pregao.slug_pregao oferta.id %}" method="get">
+                <button type="button" class="btn btn-danger">Rejeitar Proposta <i class="fas fa-times"></i></button>
+            </form>
+        </div>
+    {% endif %}
+
+    <script>
+        window.onload = function(){
+            var madeleine1 = new Madeleine({
+                target: 'target1',
+                data: '{{ pregao.modeloSTL.url }}',
+                path: '../../../static/src/'
+            });
+
+            var madeleine2 = new Madeleine({
+                target: 'target2',
+                data: '{{ oferta.modeloSTL.url }}',
+                path: '../../../static/src/'
+            });
+        };
+    </script>
+
+</div>
+{% endblock %}

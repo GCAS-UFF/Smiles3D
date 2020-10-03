@@ -1,0 +1,40 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Sobre{% endblock %}
+
+{% block main %}
+
+    <h4 class="titulo-rosa">Sobre Nós:</h4>
+    <hr>
+    <p>Nosso objetivo é conectar dentistas a protéticos e projetistas, e vice e
+        versa sem estarem restritos a grandes empresas. Nesta rede protéticos/projetistas podem oferecer sua
+        mão de obra para os dentistas, na forma de leilões, onde o dentista pode escolher entre, dentre várias
+        opções, a melhor escolha que se encaixa com suas necessidades.</p>
+    <br>
+    <h4 class="titulo-rosa" id="duvidas">Dúvidas</h4>
+    <hr>
+    <h5 class="titulo-azul">Pagamento</h5>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus volutpat auctor odio, eu pellentesque tellus tempor a. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur faucibus, erat eget scelerisque convallis, odio arcu lacinia velit, nec placerat neque sapien at sem. Duis sed hendrerit magna, non dapibus purus. Maecenas vel pretium lorem. Ut eu felis sed turpis placerat vehicula. Aliquam efficitur elementum pretium. Aenean et leo ac magna mattis ultricies. Aliquam ullamcorper sapien et dui facilisis viverra. Nullam at scelerisque mauris. Sed vitae nibh nec dolor consectetur accumsan sit amet eget magna. Fusce sed ipsum libero. Etiam congue euismod diam quis ullamcorper. Ut dapibus consequat sem, nec eleifend purus efficitur quis.</p>
+    <h5 class="titulo-azul">Envio e Frete</h5>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus volutpat auctor odio, eu pellentesque tellus tempor a. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur faucibus, erat eget scelerisque convallis, odio arcu lacinia velit, nec placerat neque sapien at sem. Duis sed hendrerit magna, non dapibus purus. Maecenas vel pretium lorem. Ut eu felis sed turpis placerat vehicula. Aliquam efficitur elementum pretium. Aenean et leo ac magna mattis ultricies. Aliquam ullamcorper sapien et dui facilisis viverra. Nullam at scelerisque mauris. Sed vitae nibh nec dolor consectetur accumsan sit amet eget magna. Fusce sed ipsum libero. Etiam congue euismod diam quis ullamcorper. Ut dapibus consequat sem, nec eleifend purus efficitur quis.</p>
+    <br>
+    <h4 class="titulo-rosa" id="termos">Termos de Uso</h4>
+    <hr>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus volutpat auctor odio, eu pellentesque tellus tempor a. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur faucibus, erat eget scelerisque convallis, odio arcu lacinia velit, nec placerat neque sapien at sem. Duis sed hendrerit magna, non dapibus purus. Maecenas vel pretium lorem. Ut eu felis sed turpis placerat vehicula. Aliquam efficitur elementum pretium. Aenean et leo ac magna mattis ultricies. Aliquam ullamcorper sapien et dui facilisis viverra. Nullam at scelerisque mauris. Sed vitae nibh nec dolor consectetur accumsan sit amet eget magna. Fusce sed ipsum libero. Etiam congue euismod diam quis ullamcorper. Ut dapibus consequat sem, nec eleifend purus efficitur quis.
+    Maecenas a sem urna. Maecenas non ante imperdiet, sodales felis vitae, ultricies purus. Morbi varius venenatis semper. Morbi bibendum fringilla ante, gravida tristique nulla sagittis vel. Nulla nec massa mollis, cursus dui id, ornare mi. Suspendisse a posuere lacus, sed sagittis dui. Vestibulum at lorem ut arcu tempus volutpat.</p>
+    <br>
+    <h4 class="titulo-rosa" id="politica">Política de Privacidade</h4>
+    <hr>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus volutpat auctor odio, eu pellentesque tellus tempor a. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur faucibus, erat eget scelerisque convallis, odio arcu lacinia velit, nec placerat neque sapien at sem. Duis sed hendrerit magna, non dapibus purus. Maecenas vel pretium lorem. Ut eu felis sed turpis placerat vehicula. Aliquam efficitur elementum pretium. Aenean et leo ac magna mattis ultricies. Aliquam ullamcorper sapien et dui facilisis viverra. Nullam at scelerisque mauris. Sed vitae nibh nec dolor consectetur accumsan sit amet eget magna. Fusce sed ipsum libero. Etiam congue euismod diam quis ullamcorper. Ut dapibus consequat sem, nec eleifend purus efficitur quis.
+    Maecenas a sem urna. Maecenas non ante imperdiet, sodales felis vitae, ultricies purus. Morbi varius venenatis semper. Morbi bibendum fringilla ante, gravida tristique nulla sagittis vel. Nulla nec massa mollis, cursus dui id, ornare mi. Suspendisse a posuere lacus, sed sagittis dui. Vestibulum at lorem ut arcu tempus volutpat.</p>
+    <br>
+    <h4 class="titulo-rosa" id="contato">Fale Conosco</h4>
+    <hr>
+    <form class="contato" action="{% url 'sobre' %}" method='POST' id="contato-form">
+        {{ form.nome }}
+        {{ form.email }}
+        {{ form.assunto }}
+        {{ form.mensagem }}
+        <button class="btn btn-primary mx-right" type="submit">Enviar</button>
+    </form>
+{% endblock %}

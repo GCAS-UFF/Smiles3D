@@ -1,0 +1,430 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Cadastrar{% endblock %}
+
+{% block addstuff %}
+    <script src="{% static 'js/cadastro.js' %}"></script>
+    <link href="{% static 'css/cadastro.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3 class="titulo-rosa">Cadastro</h3>
+
+	<div class="form-progress" id="form-progress">
+		<progress class="form-progress-bar" min="0" max="100" value="0" step="50" aria-labelledby="form-progress-completion" id="progress"></progress>
+		<div class="form-progress-indicator one active" id="one"></div>
+		<div class="form-progress-indicator two" id="two"></div>
+	</div>
+
+
+	<div class="animation-container container mx-auto" xmlns="http://www.w3.org/1999/html" id="animation-container">
+        <form method="post" novalidate action="{% url 'cadastro' %}">
+        {% csrf_token %}
+            <!-- Step one -->
+            <div class="form-step js-form-step" data-step="1" id="formulario_cadastro">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Nome de Usuário:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in form.username.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>E-mail:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in form.email.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Senha:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in form.password1.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Confirme sua senha:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in form.password2.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Sua conta é:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ form.tipo }}
+                        {% if form.tipo.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in form.tipo.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Endereço:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formEndereco.endereco }}
+                        {% if formEndereco.endereco.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formEndereco.endereco.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Complemento:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formEndereco.complemento }}
+                        {% if formEndereco.complemento.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formEndereco.complemento.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>CEP:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formEndereco.cep }}
+                        {% if formEndereco.cep.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formEndereco.cep.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Cidade:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formEndereco.cidade }}
+                        {% if formEndereco.cidade.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formEndereco.cidade.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>UF:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formEndereco.uf }}
+                        {% if formEndereco.uf.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formEndereco.uf.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="g-recaptcha" data-sitekey="6LfuJXEUAAAAAFPN2EIBGMw1C3qTvlGta6pCS2kp"></div>
+
+                <div class="buttons">
+                    <a href="{% url 'cadastro' %}" style="width:80px; margin-top:20px; float: left;"><i class="fas fa-chevron-left"></i> CANCELAR</a>
+                    <button type="button" class="btn" onclick="darContinuidadeAoform()">CONTINUAR</button>
+                </div>
+            </div>
+
+            <!-- Step two -->
+            <div class="form-step js-form-step waiting hidden" data-step="2" id="pf">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Nome:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.nome }}
+                        {% if formPF.nome.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.nome.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>CPF:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.cpf }}
+                        {% if formPF.cpf.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.cpf.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>CRO:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.cro }}
+                        {% if formPF.cro.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.cro.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Foto:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.foto }}
+                        {% if formPF.foto.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.foto.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Profissão:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.profissao }}
+                        {% if formPF.profissao.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.profissao.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Autônomo:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.autonomo }}
+                        {% if formPF.autonomo.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.autonomo.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row" id="trabalha-em-empresa" style="display: none;">
+                    <div class="col-4">
+                        <label>Empresa para a qual trabalha:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.empresa }}
+                        {% if formPF.empresa.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.empresa.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Telefone:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.telefone }}
+                        {% if formPF.telefone.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.telefone.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <a href="{% url 'cadastro' %}" style="width:80px; margin-top:20px; float: left;"><i class="fas fa-chevron-left"></i> CANCELAR</a>
+                    <button type="submit" class="btn">CONTINUAR</button>
+                </div>
+            </div>
+
+            <!-- Step three -->
+            <div class="form-step js-form-step waiting hidden" data-step="2" id="pj">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Razão Social:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPJ.razao_social }}
+                        {% if formPJ.razao_social.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPJ.razao_social.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>CNPJ:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPJ.cnpj }}
+                        {% if formPJ.cnpj.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPJ.cnpj.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Foto:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPJ.foto }}
+                        {% if formPJ.foto.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPJ.foto.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Departamento:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPJ.departamento }}
+                        {% if formPJ.departamento.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPJ.departamento.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Telefone:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.telefone }}
+                        {% if formPF.telefone.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.telefone.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <a href="{% url 'cadastro' %}" style="width:80px; margin-top:20px; float: left;"><i class="fas fa-chevron-left"></i> CANCELAR</a>
+                    <button type="submit" class="btn">CONTINUAR</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}

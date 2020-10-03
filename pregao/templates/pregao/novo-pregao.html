@@ -1,0 +1,183 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Novo Pregão{% endblock %}
+
+{% block main %}
+    <h3 class="pt-3 titulo-rosa">Preencha as Informações do Pregão: </h3>
+    <hr>
+    <form method="post" novalidate id="form" action="{% url 'novo-pregao' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Dente(s)*:</label>
+            </div>
+            <div class="col-10">
+                <img src="{% static 'images/Odontograma-Dentes-Cima.jpg' %}">
+                <ul class="dentes">
+                    {% for field in form.dente %}
+                        {% ifequal forloop.counter 17 %}</ul><ul class="dentes">{% endifequal %}
+                        <li style="width: 7%;">{{ field }}</li>
+                    {% endfor %}
+                </ul>
+                <img src="{% static 'images/Odontograma-Dentes-Baixo.jpg' %}">
+                {% if form.dente.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.dente.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Tipo de Serviço*:</label>
+            </div>
+            <div class="col-10">
+                {{ form.tipo }}
+                {% if form.tipo.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.tipo.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Cor (baseado na escala VITA 3D Master)*:</label>
+            </div>
+            <div class="col-10">
+                {{ form.cor }}
+                {% if form.cor.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.cor.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Escala*:</label>
+            </div>
+            <div class="col-10">
+                {{ form.escala }}
+                {% if form.escala.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.escala.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Material*:</label>
+            </div>
+            <div class="col-lg-10">
+                {{ form.material }}
+                {% if form.material.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.material.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Observações:</label>
+            </div>
+            <div class="col-10">
+                {{ form.extra }}
+                {% if form.extra.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.extra.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Preço Inicial*:</label>
+            </div>
+            <div style="display:flex; flex-direction: row;" class="col-10">
+                R$ {{ form.preco }}
+                {% if form.preco.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.preco.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Prazo*:</label>
+            </div>
+            <div class="col-10">
+                {{ form.prazo }}
+                {% if form.prazo.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.prazo.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Arquivo STL*:</label>
+            </div>
+            <div class="col-10">
+                {{ form.modeloSTL }}
+                {% if form.modeloSTL.errors %}
+                    <div class="alert alert-danger mb-0 erro">
+                        {% for error in form.modeloSTL.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <p class="aviso">* Campos Obrigatórios</p>
+
+        <div class="row">
+            <div class="col-6">
+                <a href="{% url 'meus-pregoes' %}"><p class="py-3"><i class="fas fa-chevron-left"></i>  Voltar</p></a>
+            </div>
+            <div class="col-6">
+                {% if edit %}
+                    <button class="btn btn-primary btn-block mb-3 ml-auto botao-formulario" type="submit">SALVAR</button>
+                {% else %}
+                    <button class="btn btn-primary btn-block mb-3 ml-auto botao-formulario" type="submit">ENVIAR</button>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+<script>
+    window.onbeforeunload = function(){
+        return 'Are you sure you want to leave?';
+    };
+</script>
+
+{% endblock %}

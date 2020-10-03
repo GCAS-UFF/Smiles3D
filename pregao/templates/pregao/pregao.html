@@ -1,0 +1,273 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% block title %}Pregão{% endblock %}
+
+{% block addstuff %}
+    <script src="{% static 'src/lib/detector.js' %}"></script>
+    <script src="{% static 'src/lib/MadeleineConverter.js' %}"></script>
+    <script src="{% static 'src/lib/MadeleineLoader.js' %}"></script>
+    <script src="{% static 'src/lib/stats.js' %}"></script>
+    <script src="{% static 'src/lib/three.min.js' %}"></script>
+    <script src="{% static 'src/Madeleine.js' %}"></script>
+    <link href="{% static 'src/css/Madeleine.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3 class="pt-3 titulo-rosa">Pregão Aberto </h3>
+    <hr>
+    <div class="container mb-5 mx-auto">
+        {% if pregao.usuario == request.user %}
+            <a href="{% url 'editar-pregao' pregao.slug_pregao %}" class="opcoes-criador"><i class="fas fa-pencil-alt"></i></a>
+            <a href="{% url 'remove-pregao' pregao.slug_pregao %}" class="opcoes-criador"><i class="fas fa-trash-alt"></i></a>
+        {% endif %}
+        <ul class="lista-nao informarcoes">
+            <li><strong>Dono: </strong><a href="{% url 'perfil' pregao.usuario %}">{{ pregao.usuario }}</a></li>
+            <li><strong>Tipo do pregão: </strong>{{ pregao.tipo }}</li>
+            <li><strong>Dente: </strong>
+                {% for dente in pregao.dentes %}
+                    {{ dente }},
+                {% endfor %}
+            </li>
+            <li><strong>Cor: </strong>{{ pregao.cor }}</li>
+            <li><strong>Escala: </strong>{{ pregao.escala }}</li>
+            <li><strong>Material: </strong>{{ pregao.material }}</li>
+            <li><strong>Observações: </strong>{{ pregao.extra }}</li>
+            <li><strong>Preço inicial: </strong>R${{ pregao.preco }}</li>
+            <li><strong>Data de registro: </strong><em>{{ pregao.data }}</em></li>
+            <li><strong>Prazo: </strong><em>{{ pregao.prazo }}</em></li>
+            <li><strong>Arquivo STL:</strong>
+                <div class="container">
+                    <div id="target" class="madeleine"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row m-0">
+        <div class="container col-6">
+             <h3 class="titulo-rosa">Comentários: </h3>
+            {% if comentarios %}
+                 {% for c in comentarios %}
+                     <div class="container caixa">
+                         <a href="{% url 'perfil' c.user %}" class="cNome"><strong>{{c.user}}</strong></a>
+                         {% if request.user == c.user %}
+                            <a href="{% url 'remove-comentario' pregao.slug_pregao c.id %}" class="opcoes-criador"><i class="fas fa-trash"></i></a>
+                         {% endif %}
+                         <div class="container row">
+                             <div class="fotoPerfil col-2">
+                                 <a href="{% url 'perfil' c.user %}"><img src="{{ c.user.foto.url }}" class="img-fluid"></a>
+                             </div>
+                             <div class="col-10">
+                                {{ c.comentario }}
+                             </div>
+                         </div>
+                     </div>
+                     <br>
+                 {% endfor %}
+                 {% if comentarios.has_previous %}
+                    <a href="?page={{ comentarios.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+                 {% endif %}
+                    <span class="current">{{ comentarios.number }} de {{ comentarios.paginator.num_pages }}</span>
+                 {% if comentarios.has_next %}
+                    <a href="?page={{ comentarios.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+                 {% endif %}
+            {% else %}
+                <p>Ainda não há comentários para este pregão.</p>
+            {% endif %}
+
+            <form method="post" novalidate action="{% url 'visualizar-pregao' pregao.slug_pregao %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Novo Comentário:</label>
+                    {{ form_comment.comentario }}
+                    {% if form_comment.comentario.errors %}
+                        <div class="alert alert-danger mb-0 erro">
+                            {% for error in form_comment.comentario.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <button class="btn btn-primary btn-block botao-formulario" type="submit" name="comentario">ENVIAR </button>
+            </form>
+        </div>
+
+        <div class="container col-6">
+            <h3 class="titulo-rosa">Propostas: </h3>
+            {% if ofertas %}
+                {% for oferta in ofertas %}
+                <div class="container propostas">
+                    <a href="{% url 'perfil' oferta.usuario %}" class="cNome"><strong>{{ oferta.usuario }}</strong></a>
+                    {% if request.user == oferta.user %}
+                        <a href="{% url 'edita-oferta' pregao.slug_pregao oferta.id %}" class="opcoes-criador"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{% url 'remove-oferta' pregao.slug_pregao oferta.id %}" id="btn-excluir-proposta" class="opcoes-criador"><i class="fas fa-trash-alt"></i></a>
+                    {% endif %}
+                    <p>Preço: {{oferta.preco}}</p>
+                    <p>Prazo: {{oferta.prazo}}</p>
+                    <a href="{% url 'visualizar-oferta' pregao.slug_pregao oferta.id %}">Ver Detalhes <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <br>
+                {% endfor %}
+                {% if ofertas.has_previous %}
+                    <a href="?page={{ ofertas.previous_page_number }}"><i class="fas fa-arrow-left"></i></a>
+                {% endif %}
+                <span class="current">{{ ofertas.number }} de {{ ofertas.paginator.num_pages }}</span>
+                {% if ofertas.has_next %}
+                    <a href="?page={{ ofertas.next_page_number }}"><i class="fas fa-arrow-right"></i></a>
+                {% endif %}
+            {% else %}
+                <p>Ainda não há propostas para este pregão.</p>
+            {% endif %}
+            {% if pregao.close == False %}
+                <a href="#novaproposta" data-toggle="modal"> REALIZAR OFERTA  <i class="fas fa-briefcase"></i></a>
+            {% endif %}
+        </div>
+
+        <div class="modal fade" id="novaproposta">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="modal-title font-weight-bold">Criar Nova Proposta</span>
+                         <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" novalidate action="{% url 'visualizar-pregao' pregao.slug_pregao %}"  id="form_oferta" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <label>Preço*:</label>
+                                </div>
+                                <div class="col-9">
+                                    {{ form_oferta.preco }}
+                                    {% if form_oferta.preco.errors %}
+                                        <div class="alert alert-danger mb-0 erro">
+                                            {% for error in form_oferta.preco.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <label>Prazo*:</label>
+                                </div>
+                                <div class="col-9">
+                                    {{ form_oferta.prazo }}
+                                    {% if form_oferta.prazo.errors %}
+                                        <div class="alert alert-danger mb-0 erro">
+                                            {% for error in form_oferta.prazo.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <label>Forma de Envio*:</label>
+                                </div>
+                                <div class="col-9">
+                                    {{ form_oferta.forma_envio }}
+                                    {% if form_oferta.forma_envio.errors %}
+                                        <div class="alert alert-danger mb-0 erro">
+                                            {% for error in form_oferta.forma_envio.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <label>Forma de Pagamento*:</label>
+                                </div>
+                                <div class="col-9">
+                                    {{ form_oferta.forma_pagamento }}
+                                    {% if form_oferta.forma_pagamento.errors %}
+                                        <div class="alert alert-danger mb-0 erro">
+                                            {% for error in form_oferta.forma_pagamento.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <label>Observações*:</label>
+                                </div>
+                                <div class="col-9">
+                                    {{ form_oferta.observacao }}
+                                    {% if form_oferta.observacao.errors %}
+                                        <div class="alert alert-danger mb-0 erro">
+                                            {% for error in form_oferta.observacao.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <label>Modelo STL*:</label>
+                                </div>
+                                <div class="col-9">
+                                    {{ form_oferta.modeloSTL }}
+                                    {% if form_oferta.modeloSTL.errors %}
+                                        <div class="alert alert-danger mb-0 erro">
+                                            {% for error in form_oferta.modeloSTL.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <p class="aviso">* Campos obrigatórios</p>
+                            <button class="btn btn-primary btn-block botao-formulario" type="submit" name="oferta">ENVIAR </button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+<script>
+     window.onload = function(){
+        var madeleine = new Madeleine({
+            target: 'target',
+            data: '{{ pregao.modeloSTL.url }}',
+            path: '../../../static/src/'
+        });
+    };
+
+    document.getElementById("btn-excluir-proposta").onclick = function () {
+         return confirm("Você realmente deseja excluir sua proposta? \nEsta ação não pode ser desfeita.");
+    };
+
+    document.getElementById("id_comentario").onchange = function () {
+        console.log("a");
+        console.log(document.getElementById("id_comentario").innerHTML);
+    }
+</script>
+
+
+{% endblock %}

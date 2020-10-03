@@ -1,0 +1,104 @@
+{% extends 'smiles3d/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Cadastrar{% endblock %}
+
+{% block main %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3 class="pt-3" style="color: rgba(255, 4, 92, 1);">Cadastro </h3>
+    <div class="container mx-auto" style="width: 70%;">
+        <form method="post" action="{% url 'cadastro-pj' %}">
+            {% csrf_token %}
+            <div class="form-group row">
+                    <div class="col-4">
+                        <label>Razão Social:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPJ.razao_social }}
+                        {% if formPJ.razao_social.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPJ.razao_social.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>CNPJ:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPJ.cnpj }}
+                        {% if formPJ.cnpj.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPJ.cnpj.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Foto:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPJ.foto }}
+                        {% if formPJ.foto.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPJ.foto.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Departamento:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPJ.departamento }}
+                        {% if formPJ.departamento.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPJ.departamento.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label>Telefone:</label>
+                    </div>
+                    <div class="col-8">
+                        {{ formPF.telefone }}
+                        {% if formPF.telefone.errors %}
+                            <div class="alert alert-danger mb-0" style="padding-top: 2px; padding-bottom: 2px;">
+                                {% for error in formPF.telefone.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            <a href="{% url 'cadastro' %}" style="width:80px; margin-top:20px; float: left;"><i class="fas fa-chevron-left"></i> CANCELAR</a>
+            <button class="btn btn-primary btn-block" type="submit" style="width:80px; margin-top:20px; float: right;">CADASTRAR</button>
+        </form>
+    </div>
+
+{% endblock %}
